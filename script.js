@@ -336,19 +336,24 @@
     animFrame = requestAnimationFrame(frame);
   }
 
-  const STORAGE_KEY   = 'cad_spin_used';
-  const STORAGE_PRIZE = 'cad_spin_prize';
+  const STORAGE_PERIOD = 'cad_spin_period';
+const STORAGE_PRIZE   = 'cad_spin_prize';
 
-  function hasSpun() {
-    try { return !!localStorage.getItem(STORAGE_KEY); } catch (e) { return false; }
-  }
+function currentPeriod() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
 
-  function markSpun(prize) {
-    try {
-      localStorage.setItem(STORAGE_KEY, Date.now());
-      localStorage.setItem(STORAGE_PRIZE, prize);
-    } catch (e) {}
-  }
+function hasSpun() {
+  try { return localStorage.getItem(STORAGE_PERIOD) === currentPeriod(); } catch (e) { return false; }
+}
+
+function markSpun(prize) {
+  try {
+    localStorage.setItem(STORAGE_PERIOD, currentPeriod());
+    localStorage.setItem(STORAGE_PRIZE, prize);
+  } catch (e) {}
+}
 
   function showLockedState(prize) {
     spinBtn.disabled = true;
