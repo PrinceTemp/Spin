@@ -336,24 +336,29 @@
     animFrame = requestAnimationFrame(frame);
   }
 
+  // --- Monthly reset logic ---
+  // Instead of a permanent "have they ever spun" flag, we store which
+  // year-month they last spun in. If the stored period doesn't match
+  // the current year-month, they're allowed to spin again — giving
+  // everyone a fresh spin each month with zero manual reset needed.
   const STORAGE_PERIOD = 'cad_spin_period';
-const STORAGE_PRIZE   = 'cad_spin_prize';
+  const STORAGE_PRIZE   = 'cad_spin_prize';
 
-function currentPeriod() {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-}
+  function currentPeriod() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  }
 
-function hasSpun() {
-  try { return localStorage.getItem(STORAGE_PERIOD) === currentPeriod(); } catch (e) { return false; }
-}
+  function hasSpun() {
+    try { return localStorage.getItem(STORAGE_PERIOD) === currentPeriod(); } catch (e) { return false; }
+  }
 
-function markSpun(prize) {
-  try {
-    localStorage.setItem(STORAGE_PERIOD, currentPeriod());
-    localStorage.setItem(STORAGE_PRIZE, prize);
-  } catch (e) {}
-}
+  function markSpun(prize) {
+    try {
+      localStorage.setItem(STORAGE_PERIOD, currentPeriod());
+      localStorage.setItem(STORAGE_PRIZE, prize);
+    } catch (e) {}
+  }
 
   function showLockedState(prize) {
     spinBtn.disabled = true;
